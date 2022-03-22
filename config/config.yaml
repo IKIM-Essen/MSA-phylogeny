@@ -1,4 +1,10 @@
-# This file should contain everything to configure the workflow on a global scale.
-# In case of sample based data, it should be complemented by a samples.tsv file that contains
-# one row per sample. It can be parsed easily via pandas.
-samples: "config/samples.tsv"
+pepfile: config/pep/config.yaml
+
+data-handling:
+  # flag for using the following data-handling structure
+  # True: data-handling structure is used as shown below
+  # False: only the sample sheet needs to be updated (manually)
+  use-data-handling: True
+  # path of incoming data, which is moved to the
+  # data directory by the preprocessing script
+  incoming: ../MSA-input/

@@ -4,15 +4,18 @@
 
 report: "report/workflow.rst"
 
-# Allow users to fix the underlying OS via singularity.
-singularity: "docker://continuumio/miniconda3"
+
+configfile: "config/config.yaml"
 
 
-rule all:
-    input:
-        # The first rule should define the default target files
-        # Subsequent target rules can be specified below. They should start with all_*.
+pepfile: config["pepfile"]
 
 
 include: "rules/common.smk"
-include: "rules/other.smk"
+include: "rules/utils.smk"
+include: "rules/MSA.smk"
+include: "rules/phylogeny.smk"
+
+rule all:
+    input:
+        "results/test.txt"
