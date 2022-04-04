@@ -17,21 +17,21 @@ rule extract_regions:
         sequence="resources/genomes/MN908947.fasta",
         bed="resources/annotation.bed",
     output:
-        sections="resources/MN908947.sections.fasta",
+        regions="resources/MN908947.regions.fasta",
     log:
         "logs/extract_regions/main.log",
     conda:
         "../envs/seqtk.yaml"
     shell:
-        "seqtk subseq {input.sequence} {input.bed} > {output.sections} 2> {log}"
+        "seqtk subseq {input.sequence} {input.bed} > {output.regions} 2> {log}"
         
     
 rule rename_regions:
     input:
-        sections="resources/MN908947.sections.fasta",
+        regions="resources/MN908947.regions.fasta",
         bed="resources/annotation.bed",
     output:
-        renamed_sections="resources/MN908947.renamed-sections.fasta",
+        renamed_regions="resources/MN908947.renamed-regions.fasta",
     log:
         "logs/rename-regions/main.log",
     conda:
@@ -43,7 +43,7 @@ rule rename_regions:
 rule align_genomes:
     input:
         query=lambda wildcards: get_genomes(wildcards),
-        target="resources/MN908947.renamed-sections.fasta",
+        target="resources/MN908947.renamed-regions.fasta",
     output:
         "results/aligned~main/{sample}.sam",
     log:
@@ -54,72 +54,47 @@ rule align_genomes:
         "minimap2 -a {input.target} {input.query} -o {output} 2> {log}"
 
 
-rule freebayes:
+checkpoint extract_sequence:
     input:
-        ref="resources/genomes/MN908947.fasta",
-        ref_idx="resources/genomes/MN908947.fasta.fai",
-        samples="results/aligned~main/{sample}.sorted.bam",
+        bam="results/aligned~main/{sample}.sorted.bam",
         index="results/aligned~main/{sample}.sorted.bam.bai",
     output:
-        "results/var-calls/ref~main/{sample}.bcf",
-    params:
-        extra=("--min-alternate-count 1"),
+        seq="results/region-of-interest/{sample}~{region}.fasta",
     log:
-        "logs/freebayes/ref~main/{sample}.log",
-    wrapper:
-        "0.68.0/bio/freebayes"
-
-
-# rule bed_intersect:
-#     input:
-#         gff="resources/annotation.gff.gz",
-#         bcf="results/var-calls/ref~main/{sample}.bcf",
-#     output:
-#         region="results/region-of-interest/{sample}~{region}.vcf",
-#     log:
-#         "logs/bedtools-intersect/{sample}~{region}.log",
-#     conda:
-#         "../envs/bedtools.yaml"
-#     shell:
-#         "bedtools intersect -a <(bcftools view {input.bcf}) -b <(zcat {input.gff} | "
-#         "grep 'ame={wildcards.region}' |  "
-#         "awk -F '\\t' '{{print $4}}' | "
-#         "uniq | "
-#         "grep -f - <(zcat {input.gff}) | "
-#         "bedtools merge -i /dev/stdin) -bed > {output} 2> {log}"
-
-
-rule bed_intersect:
-    input:
-        gff="resources/annotation.gff.gz",
-        bam="results/aligned~main/{sample}.sorted.bam",
-    output:
-        region="results/region-of-interest/{sample}~{region}.bed",
-    log:
-        "logs/bedtools-intersect/{sample}~{region}.log",
+        "logs/extract-sequence/{sample}~{region}.log"
     conda:
-        "../envs/bedtools.yaml"
+        "../envs/python.yaml"
+    script:
+        "../scripts/extract-sequences.py"
+
+
+rule cat_genomes_for_MSA:
+    input:
+        sample_genomes=lambda wildcards: expand(
+            "results/region-of-interest/{sample}~{{region}}.fasta",
+            sample=get_samples(),
+        )
+    output:
+        all_genomes="results/region-of-interest/{region}.fasta",
+    log:
+        "logs/cat-sequences/{region}.log",
     shell:
-        "bedtools intersect -abam {input.bam} -b <(zcat {input.gff} | "
-        "grep 'ame={wildcards.region}' |  "
-        "awk -F '\\t' '{{print $4}}' | "
-        "uniq | "
-        "grep -f - <(zcat {input.gff}) | "
-        "bedtools merge -i /dev/stdin) -u > {output} 2> {log}"
+        "cat {input} > {output}"
 
 
-# rule bed_intersect:
-#     input:
-#         gff="resources/annotation~S.gff",
-#         bcf="results/var-calls/ref~main/{sample}.bcf",
-#     output:
-#         region="results/region-of-interest/{sample}.vcf",
-#     log:
-#         "logs/bedtools-intersect/{sample}.log",
-#     conda:
-#         "../envs/bedtools.yaml"
-#     shell:
-#         "bedtools intersect -a <(bcftools view {input.bcf}) -b {input.gff}  > {output} 2> {log} "
-#         # "bedtools merge -i /dev/stdin > {output} 2> {log}"
+rule mafft_alignment:
+    input:
+        "results/region-of-interest/{region}.fasta",
+    output:
+        "results/region-of-interest/{region}~aligned.fasta",
+    log:
+        "logs/aligned~mafft/{region}.log",
+    conda:
+        "../envs/mafft.yaml"
+    shell:
+        "mafft {input} > {output}"
 
 
+rule get_output:
+    input:
+        "results/region-of-interest/S~aligned.fasta",
