@@ -78,6 +78,8 @@ rule cat_genomes_for_MSA:
         all_genomes="results/region-of-interest/{region}.fasta",
     log:
         "logs/cat-sequences/{region}.log",
+    conda:
+        "../envs/unix.yaml"
     shell:
         "cat {input} > {output}"
 
