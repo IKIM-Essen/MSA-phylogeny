@@ -54,7 +54,7 @@ rule align_genomes:
         "minimap2 -a {input.target} {input.query} -o {output} 2> {log}"
 
 
-checkpoint extract_sequence:
+rule extract_sequence:
     input:
         bam="results/aligned~main/{sample}.sorted.bam",
         index="results/aligned~main/{sample}.sorted.bam.bai",
@@ -75,7 +75,7 @@ rule cat_genomes_for_MSA:
             sample=get_samples(),
         )
     output:
-        all_genomes="results/region-of-interest/{region}.fasta",
+        all_genomes="results/msa-unaligned-seqs/{region}.fasta",
     log:
         "logs/cat-sequences/{region}.log",
     conda:
@@ -86,9 +86,9 @@ rule cat_genomes_for_MSA:
 
 rule mafft_alignment:
     input:
-        "results/region-of-interest/{region}.fasta",
+        "results/msa-unaligned-seqs/{region}.fasta",
     output:
-        "results/region-of-interest/{region}~aligned.fasta",
+        "results/msa-aligned/{region}~aligned.fasta",
     log:
         "logs/aligned~mafft/{region}.log",
     conda:
@@ -99,4 +99,4 @@ rule mafft_alignment:
 
 rule get_output:
     input:
-        "results/region-of-interest/S~aligned.fasta",
+        "results/msa-aligned/S~aligned.fasta",
