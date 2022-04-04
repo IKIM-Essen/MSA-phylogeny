@@ -5,6 +5,7 @@ analysis/*
 !config
 !config/**
 !data
+!data/*
 !data/query
 !data/reference
 !resources
