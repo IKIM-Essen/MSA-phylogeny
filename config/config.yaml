@@ -11,6 +11,19 @@ references-folder: resources/genomes
 virus-reference-genome:
   - MN908947
 
+# please comment/uncomment the regions you want to include in your analysis
+# note, that there are two definitions for ORF1ab
 regions-of-interest:
-  - S
   - genome
+  - ORF1ab
+  - S
+  - ORF3a
+  - E
+  - M
+  - ORF6
+  - ORF7a
+  - ORF7b
+  - ORF8
+  - N
+  - ORF10
+
