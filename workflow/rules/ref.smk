@@ -27,30 +27,3 @@ rule get_genome_annotation:
         "zcat | grep -v '#' | sort -k1,1 -k4,4n -k5,5n -t$'\t' | bgzip -c > {output}) 2> {log}"
 
 
-# rule get_gisaid_provision:
-#     output:
-#         "resources/gisaid/provision.json",
-#     log:
-#         "logs/get_gisaid_provision.log",
-#     conda:
-#         "../envs/unix.yaml"
-#     shell:
-#         "(curl -L -u $GISAID_API_TOKEN https://www.epicov.org/epi3/3p/resseq02/export/provision.json.xz |"
-#         " xz -d -T0 > {output})"
-#         " > {log} 2>&1"
-
-
-# checkpoint extract_strain_genomes_from_gisaid:
-#     input:
-#         "resources/gisaid/provision.json",
-#     output:
-#         "results/{tag}/tables/strain-genomes.txt",
-#     params:
-#         save_strains_to=config["references-folder"],
-#         strains_of_interest=config["references-of-interest"],
-#     log:
-#         "logs/extract-strain-genomes.log",
-#     conda:
-#         "../envs/python.yaml"
-#     script:
-#         "../scripts/extract-strains-from-gisaid-provision.py"
