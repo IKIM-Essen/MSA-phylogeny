@@ -15,15 +15,15 @@ from ruamel import yaml  # conda install -c conda-forge ruamel.yaml
 # define location of sample sheet and workflow config
 
 def update_sample_sheet():
-    """
-    This function updated the samples.csv file in your config with all .fasta files
+    print("""
+    This function updates the samples.csv file in your config with all .fasta files
     included in data/query and data/reference. Please make sure all query files are
     single fastas per sample. Reference fasta files can be multiple sequenence fasta 
     files. All sequences have to be named properly (≤ ten letters) as some applications
     cutoff sequence names.
 
     Please make sure to define a tag after the sample sheet is generated
-    """
+    """)
 
     config = snakemake.config
 
