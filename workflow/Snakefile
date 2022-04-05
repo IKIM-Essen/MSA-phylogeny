@@ -22,4 +22,8 @@ include: "rules/ref.smk"
 
 rule all:
     input:
-        "results/{tag}/test.txt",
+        expand(
+            "results/{tag}/phylogeny/{region}/{region}~phylo.iqtree",
+            tag=get_all_tags(),
+            region=config["regions-of-interest"],
+        ),
