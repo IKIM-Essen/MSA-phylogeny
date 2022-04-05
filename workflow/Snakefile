@@ -19,7 +19,6 @@ include: "rules/phylogeny.smk"
 include: "rules/ref.smk"
 
 
-
 rule all:
     input:
         expand(

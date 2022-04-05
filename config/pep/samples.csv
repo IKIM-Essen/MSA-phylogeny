@@ -1,3 +1,13 @@
 sample_name,file,type,tag
-SAMPLE,data/query/YOUR-QUERY-FILE.fasta,query,your_tag
-REF,data/reference/YOUR-REF-FILE.fasta,reference,your_tag
+Maren-36_pseudo,data/query/Maren-36_pseudo.fasta,query,your_tag
+Maren-32_pseudo,data/query/Maren-32_pseudo.fasta,query,your_tag
+Maren-34_de-novo,data/query/Maren-34_de-novo.fasta,query,your_tag
+Maren-35_pseudo,data/query/Maren-35_pseudo.fasta,query,your_tag
+Maren-33_de-novo,data/query/Maren-33_de-novo.fasta,query,your_tag
+Maren-30_pseudo,data/query/Maren-30_pseudo.fasta,query,your_tag
+Maren-25_pseudo,data/query/Maren-25_pseudo.fasta,query,your_tag
+B.1.1.7,data/reference/B.1.1.7.fasta,reference,your_tag
+B.1.351,data/reference/B.1.351.fasta,reference,your_tag
+BA.1,data/reference/BA.1.fasta,reference,your_tag
+AY.99.2,data/reference/AY.99.2.fasta,reference,your_tag
+B.1,data/reference/B.1.fasta,reference,your_tag

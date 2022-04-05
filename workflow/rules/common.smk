@@ -23,6 +23,7 @@ def get_samples_for_tag(tag):
 
     return list(df["sample_name"].values)
 
+
 def get_fastas_by_region(wildcards):
     if wildcards.region == "genome":
         return get_genomes(sample=get_samples_for_tag(wildcards.tag))

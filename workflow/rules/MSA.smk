@@ -24,8 +24,8 @@ rule extract_regions:
         "../envs/seqtk.yaml"
     shell:
         "seqtk subseq {input.sequence} {input.bed} > {output.regions} 2> {log}"
-        
-    
+
+
 rule rename_regions:
     input:
         regions="resources/MN908947.regions.fasta",
@@ -61,7 +61,7 @@ rule extract_sequence:
     output:
         seq="results/{tag}/region-of-interest/{sample}~{region}.fasta",
     log:
-        "logs/{tag}/extract-sequence/{sample}~{region}.log"
+        "logs/{tag}/extract-sequence/{sample}~{region}.log",
     conda:
         "../envs/python.yaml"
     script:
