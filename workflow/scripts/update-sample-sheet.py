@@ -20,7 +20,9 @@ def update_sample_sheet():
     included in data/query and data/reference. Please make sure all query files are
     single fastas per sample. Reference fasta files can be multiple sequenence fasta 
     files. All sequences have to be named properly (≤ ten letters) as some applications
-    cutoff sequence names
+    cutoff sequence names.
+
+    Please make sure to define a tag after the sample sheet is generated
     """
 
     config = snakemake.config
@@ -32,7 +34,7 @@ def update_sample_sheet():
 
     if not incoming_files:
         print("No files in data/query")
-        new_files_reference = pd.DataFrame(columns=["sample_name", "file", "type"])
+        new_files_reference = pd.DataFrame(columns=["sample_name", "file", "type", "tag"])
     else:
         print("Updating sample sheet")
         # create dataframe
@@ -44,6 +46,7 @@ def update_sample_sheet():
         )
 
         new_files_query["type"] = "query"
+        new_files_query["tag"] = "your_tag"
         # add path of file
         new_files_query["file"] = QUERY_PATH + "/" + new_files_query["file"]
 
@@ -66,6 +69,7 @@ def update_sample_sheet():
         )
 
         new_files_reference["type"] = "reference"
+        new_files_reference["tag"] = "your_tag"
         # add path of file
         new_files_reference["file"] = REFERENCE_PATH + "/" + new_files_reference["file"]
 
@@ -74,7 +78,7 @@ def update_sample_sheet():
 
         sample_sheet = pd.concat([new_files_query, new_files_reference])
 
-        sample_sheet.to_csv(snakemake.input[0], index=False, columns=["sample_name", "file", "type"])
+        sample_sheet.to_csv(snakemake.input[0], index=False, columns=["sample_name", "file", "type", "tag"])
 
 
 update_sample_sheet()

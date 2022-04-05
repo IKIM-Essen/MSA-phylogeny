@@ -2,13 +2,13 @@ rule make_phylogeny:
     input:
         fasta="results/{tag}/msa-aligned/{region}~aligned.fasta",
     output:
-        inter_fasta=temp("results/{tag}/phylogeny/{region}~phylo"),
-        treefile="results/{tag}/phylogeny/{region}~phylo.iqtree",
-        nwk_tree="results/{tag}/phylogeny/{region}~phylo.treefile",
-        ml_dist="results/{tag}/phylogeny/{region}~phylo.mldist",
-        iqtree_log="results/{tag}/phylogeny/{region}~phylo.log",
+        inter_fasta=temp("results/{tag}/phylogeny/{region}/{region}~phylo"),
+        treefile="results/{tag}/phylogeny/{region}/{region}~phylo.iqtree",
+        nwk_tree="results/{tag}/phylogeny/{region}/{region}~phylo.treefile",
+        ml_dist="results/{tag}/phylogeny/{region}/{region}~phylo.mldist",
+        iqtree_log="results/{tag}/phylogeny/{region}/{region}~phylo.log",
     log:
-        "logs/iqtree/{region}.log",
+        "logs/{tag}/iqtree/{region}.log",
     conda:
         "../envs/iqtree.yaml"
     shell:
