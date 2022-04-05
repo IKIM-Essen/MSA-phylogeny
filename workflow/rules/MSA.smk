@@ -45,7 +45,7 @@ rule align_genomes:
         query=lambda wildcards: get_genomes(wildcards),
         target="resources/MN908947.renamed-regions.fasta",
     output:
-        "results/aligned~main/{sample}.sam",
+        "results/{tag}/aligned~main/{sample}.sam",
     log:
         "logs/aligned~main/{sample}.log",
     conda:
@@ -56,10 +56,10 @@ rule align_genomes:
 
 rule extract_sequence:
     input:
-        bam="results/aligned~main/{sample}.sorted.bam",
-        index="results/aligned~main/{sample}.sorted.bam.bai",
+        bam="results/{tag}/aligned~main/{sample}.sorted.bam",
+        index="results/{tag}/aligned~main/{sample}.sorted.bam.bai",
     output:
-        seq="results/region-of-interest/{sample}~{region}.fasta",
+        seq="results/{tag}/region-of-interest/{sample}~{region}.fasta",
     log:
         "logs/extract-sequence/{sample}~{region}.log"
     conda:
@@ -71,11 +71,11 @@ rule extract_sequence:
 rule cat_genomes_for_MSA:
     input:
         sample_genomes=lambda wildcards: expand(
-            "results/region-of-interest/{sample}~{{region}}.fasta",
+            "results/{tag}/region-of-interest/{sample}~{{region}}.fasta",
             sample=get_samples(),
         )
     output:
-        all_genomes="results/msa-unaligned-seqs/{region}.fasta",
+        all_genomes="results/{tag}/msa-unaligned-seqs/{region}.fasta",
     log:
         "logs/cat-sequences/{region}.log",
     conda:
@@ -86,17 +86,12 @@ rule cat_genomes_for_MSA:
 
 rule mafft_alignment:
     input:
-        "results/msa-unaligned-seqs/{region}.fasta",
+        "results/{tag}/msa-unaligned-seqs/{region}.fasta",
     output:
-        "results/msa-aligned/{region}~aligned.fasta",
+        "results/{tag}/msa-aligned/{region}~aligned.fasta",
     log:
         "logs/aligned~mafft/{region}.log",
     conda:
         "../envs/mafft.yaml"
     shell:
-        "mafft {input} > {output}"
-
-
-rule get_output:
-    input:
-        "results/msa-aligned/S~aligned.fasta",
+        "mafft {input} > {output} 2> {log}"

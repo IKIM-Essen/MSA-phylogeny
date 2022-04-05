@@ -44,7 +44,7 @@ rule get_genome_annotation:
 #     input:
 #         "resources/gisaid/provision.json",
 #     output:
-#         "results/tables/strain-genomes.txt",
+#         "results/{tag}/tables/strain-genomes.txt",
 #     params:
 #         save_strains_to=config["references-folder"],
 #         strains_of_interest=config["references-of-interest"],

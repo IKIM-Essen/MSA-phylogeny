@@ -13,11 +13,13 @@ pepfile: config["pepfile"]
 
 include: "rules/common.smk"
 include: "rules/utils.smk"
+include: "rules/preprocessing.smk"
 include: "rules/MSA.smk"
 include: "rules/phylogeny.smk"
 include: "rules/ref.smk"
 
 
+
 rule all:
     input:
-        "results/test.txt",
+        "results/{tag}/test.txt",
