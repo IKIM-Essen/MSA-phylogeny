@@ -19,7 +19,8 @@ def update_sample_sheet():
     This function updated the samples.csv file in your config with all .fasta files
     included in data/query and data/reference. Please make sure all query files are
     single fastas per sample. Reference fasta files can be multiple sequenence fasta 
-    files.
+    files. All sequences have to be named properly (≤ ten letters) as some applications
+    cutoff sequence names
     """
 
     config = snakemake.config
