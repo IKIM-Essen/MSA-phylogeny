@@ -92,3 +92,19 @@ rule mafft_alignment:
         "../envs/mafft.yaml"
     shell:
         "mafft {input} > {output} 2> {log}"
+
+
+rule cialign:
+    input:
+        "results/{tag}/msa-aligned/{region}~aligned.fasta",
+    output:
+        "results/{tag}/msa-cleaned/{region}~aligned_cleaned.fasta",
+    log:
+        "logs/{tag}/clean~cialign/{region}.log",
+    params:
+        output_stem=get_output_stem,
+    conda:
+        "../envs/cialign.yaml"
+    shell:
+        "CIAlign --infile {input} --outfile_stem {params.output_stem} --clean --visualise --interpret"
+

@@ -32,3 +32,13 @@ def get_fastas_by_region(wildcards):
             "results/{{tag}}/region-of-interest/{sample}~{{region}}.fasta",
             sample=get_samples_for_tag(wildcards.tag),
         )
+
+def get_output_stem(wildcards, output):
+    return output[0].split("_")[0]
+
+
+def get_msa_input(wildcards):
+    if wildcards.state == "aligned":
+        return "results/{tag}/msa-aligned/{region}~aligned.fasta"
+    elif wildcards.state == "cleaned":
+        return "results/{tag}/msa-cleaned/{region}~aligned_cleaned.fasta",

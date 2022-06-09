@@ -22,7 +22,8 @@ include: "rules/ref.smk"
 rule all:
     input:
         expand(
-            "results/{tag}/phylogeny/{region}/{region}~phylo.iqtree",
+            "results/{tag}/phylogeny~{state}/{region}/{region}~phylo.iqtree",
             tag=get_all_tags(),
+            state=["aligned", "cleaned"],
             region=config["regions-of-interest"],
         ),
