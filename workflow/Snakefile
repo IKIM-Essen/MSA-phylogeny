@@ -17,6 +17,7 @@ include: "rules/preprocessing.smk"
 include: "rules/MSA.smk"
 include: "rules/phylogeny.smk"
 include: "rules/ref.smk"
+include: "rules/variant-plot.smk"
 
 
 rule all:
