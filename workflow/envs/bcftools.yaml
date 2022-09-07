@@ -2,4 +2,4 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  - cialign =1.0.18
+  - bcftools =1.15
