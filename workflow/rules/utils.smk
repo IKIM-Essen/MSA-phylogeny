@@ -31,3 +31,16 @@ rule sort_bam:
         "../envs/samtools.yaml"
     shell:
         "samtools sort -o {output} -O BAM {input}"
+
+    
+rule tabix_index:
+    input:
+        "{prefix}.{fmt}.gz",
+    output:
+        "{prefix}.{fmt}.gz.tbi",
+    params:
+        "-p {fmt}",
+    log:
+        "logs/tabix-{fmt}/{prefix}.log",
+    wrapper:
+        "0.70.0/bio/tabix"
