@@ -32,7 +32,7 @@ rule bcftools_call:
     params:
         uncompressed_bcf=False,
         caller="-m",  # valid options include -c/--consensus-caller or -m/--multiallelic-caller
-        extra="--ploidy 1 -v",
+        extra="--ploidy 1",
     log:
         "logs/{tag}/variant-calling/{sample}.calls.log"
     wrapper:
@@ -71,3 +71,16 @@ rule annotate_variants:
     threads: 4
     wrapper:
         "v1.12.2/bio/vep/annotate"
+
+
+rule plot_variants:
+    input:
+        calls="results/{tag}/varcalls~main/{sample}.calls.annotated.bcf",
+    output:
+        plot="results/{tag}/plots/{sample}.varplot.png",
+    log:
+        "logs/{tag}/varplot/{sample}.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/plot-variants.py"
