@@ -1,5 +1,6 @@
 channels:
   - conda-forge
   - bioconda
+  - cf-staging
 dependencies:
-  - entrez-direct =13.9
+  - entrez-direct =16.2
